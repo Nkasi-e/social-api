@@ -7,6 +7,8 @@ name = "pypi"
 pydantic = "*"
 fastapi = {extras = ["all"], version = "*"}
 python-dotenv = "*"
+psycopg2 = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
