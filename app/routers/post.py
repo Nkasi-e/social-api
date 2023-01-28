@@ -1,6 +1,7 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from ..models import Post
 from ..config import get_db
 from ..schemas import CreatePost, PostOut
@@ -15,15 +16,22 @@ router = APIRouter(
 
 # to get all post belonging to users
 @router.get('/', response_model=List[PostOut])
-async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
-    posts = db.query(Post).all()
+async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user), skip: int = 0, limit: int = 10, search: Optional[str] = ""):
+    if search == []:
+        raise HTTPException(
+            status_code=404,
+            detail=f'search keyword "{search}" not found'
+        )
+    posts = db.query(Post).filter(or_(Post.title.ilike(
+        f'%{search}%'), Post.content.ilike(f'%{search}%'))).offset(skip).limit(limit).all()
     return posts
 
 
 # to get all person posts
 @router.get('/myposts', response_model=List[PostOut])
-async def get_personal_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
-    posts = db.query(Post).filter(Post.owner_id == current_user.id).all()
+async def get_personal_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user), limit: int = 10, skip: int = 0):
+    posts = db.query(Post).filter(
+        Post.owner_id == current_user.id).offset(skip).limit(limit).all()
     return posts
 
 
@@ -45,23 +53,6 @@ async def get_posts_by_id(id: int, db: Session = Depends(get_db), current_user: 
         raise HTTPException(
             status_code=404,
             detail=f'Post with id {id} not found'
-        )
-    return post
-
-
-# getting personal post By Id
-@router.get('/mypost/{id}', response_model=PostOut)
-async def get_posts_by_id(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
-    post = db.query(Post).filter(Post.id == id).first()
-    if not post:
-        raise HTTPException(
-            status_code=404,
-            detail=f'Post with id {id} not found'
-        )
-    if post.owner_id != current_user.id:
-        raise HTTPException(
-            status_code=401,
-            detail='User Not Authorized to perform requested action'
         )
     return post
 

@@ -2,6 +2,7 @@ from .config import Base
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
+from sqlalchemy.orm import relationship
 
 
 class Post(Base):
@@ -15,6 +16,8 @@ class Post(Base):
                         nullable=False, server_default=text('now()'))
     owner_id = Column(Integer, ForeignKey(
         'users.id', ondelete='CASCADE'), nullable=False)
+    # this relationship maks it to automatically fetch the user data for us
+    owner = relationship('User')
 
 
 class User(Base):
