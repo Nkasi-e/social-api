@@ -13,24 +13,33 @@ router = APIRouter(
 )
 
 
+# to get all post belonging to users
 @router.get('/', response_model=List[PostOut])
-async def get_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     posts = db.query(Post).all()
     return posts
 
 
+# to get all person posts
+@router.get('/myposts', response_model=List[PostOut])
+async def get_personal_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+    posts = db.query(Post).filter(Post.owner_id == current_user.id).all()
+    return posts
+
+
+# creating post to save in the db
 @router.post('/', status_code=201, response_model=PostOut)
 async def create_post(post: CreatePost, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
-    print(current_user.email)
-    new_post = Post(**post.dict())
+    new_post = Post(owner_id=current_user.id, **post.dict())
     db.add(new_post)
     db.commit()
     db.refresh(new_post)
     return new_post
 
 
+# getting single post by Id from every users post in DB
 @router.get('/{id}', response_model=PostOut)
-async def get_posts(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+async def get_posts_by_id(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     post = db.query(Post).filter(Post.id == id).first()
     if not post:
         raise HTTPException(
@@ -40,14 +49,37 @@ async def get_posts(id: int, db: Session = Depends(get_db), current_user: int = 
     return post
 
 
+# getting personal post By Id
+@router.get('/mypost/{id}', response_model=PostOut)
+async def get_posts_by_id(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+    post = db.query(Post).filter(Post.id == id).first()
+    if not post:
+        raise HTTPException(
+            status_code=404,
+            detail=f'Post with id {id} not found'
+        )
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=401,
+            detail='User Not Authorized to perform requested action'
+        )
+    return post
+
+
 @router.delete('/{id}', status_code=204)
 async def delete_post(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
-    post = db.query(Post).filter(Post.id == id)
-    if post.first() is None:
+    post_query = db.query(Post).filter(Post.id == id)
+    post = post_query.first()
+    if post is None:
         raise HTTPException(
             status_code=404,
             detail=f'Post with id {id} not found')
-    post.delete(synchronize_session=False)
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=401,
+            detail='User Not Authorized to perform requested action'
+        )
+    post_query.delete(synchronize_session=False)
     db.commit()
     return
 
@@ -56,10 +88,15 @@ async def delete_post(id: int, db: Session = Depends(get_db), current_user: int 
 async def update_post(id: int, updated_post: CreatePost, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     post_query = db.query(Post).filter(Post.id == id)
     post = post_query.first()
-    if post == None:
+    if post is None:
         raise HTTPException(
             status_code=404,
             detail=f'Post with id {id} does not exists'
+        )
+    if post.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=401,
+            detail='User Not Authorized to perform requested action'
         )
     update_data = updated_post.dict(exclude_unset=True)
     post_query.filter(Post.id == id).update(
