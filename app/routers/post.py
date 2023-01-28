@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..models import Post
 from ..config import get_db
 from ..schemas import CreatePost, PostOut
+from ..oauth2 import get_current_user
 
 
 router = APIRouter(
@@ -13,13 +14,14 @@ router = APIRouter(
 
 
 @router.get('/', response_model=List[PostOut])
-async def get_posts(db: Session = Depends(get_db)):
+async def get_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     posts = db.query(Post).all()
     return posts
 
 
 @router.post('/', status_code=201, response_model=PostOut)
-async def create_post(post: CreatePost, db: Session = Depends(get_db)):
+async def create_post(post: CreatePost, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
+    print(current_user.email)
     new_post = Post(**post.dict())
     db.add(new_post)
     db.commit()
@@ -28,7 +30,7 @@ async def create_post(post: CreatePost, db: Session = Depends(get_db)):
 
 
 @router.get('/{id}', response_model=PostOut)
-async def get_posts(id: int, db: Session = Depends(get_db)):
+async def get_posts(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     post = db.query(Post).filter(Post.id == id).first()
     if not post:
         raise HTTPException(
@@ -39,7 +41,7 @@ async def get_posts(id: int, db: Session = Depends(get_db)):
 
 
 @router.delete('/{id}', status_code=204)
-async def delete_post(id: int, db: Session = Depends(get_db)):
+async def delete_post(id: int, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     post = db.query(Post).filter(Post.id == id)
     if post.first() is None:
         raise HTTPException(
@@ -51,7 +53,7 @@ async def delete_post(id: int, db: Session = Depends(get_db)):
 
 
 @router.put('/{id}', response_model=PostOut)
-async def update_post(id: int, updated_post: CreatePost, db: Session = Depends(get_db)):
+async def update_post(id: int, updated_post: CreatePost, db: Session = Depends(get_db), current_user: int = Depends(get_current_user)):
     post_query = db.query(Post).filter(Post.id == id)
     post = post_query.first()
     if post == None:
