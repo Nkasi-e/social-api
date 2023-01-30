@@ -34,6 +34,14 @@ class PostOut(PostBase):
         orm_mode = True
 
 
+class PostLike(BaseModel):
+    Post: PostOut
+    likes: int
+
+    class Config:
+        orm_mode = True
+
+
 class CreateUser(BaseModel):
     email: EmailStr
     password: str
