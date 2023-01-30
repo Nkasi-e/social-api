@@ -19,11 +19,6 @@ router = APIRouter(
 @router.get('/', response_model=List[PostLike])
 async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(get_current_user), skip: int = 0, limit: int = 10, search: Optional[str] = ""):
 
-    # posts = db.query(Post).filter(or_(Post.title.ilike(
-    #     f'%{search}%'), Post.content.ilike(f'%{search}%'))).offset(skip).limit(limit).all()
-
-    # Join query in sql using sqlalchemy join query to add the likes table and send back to users
-    # func.count() return the count or number of liked post.
     posts = db.query(Post, func.count(Like.post_id).label('likes')).join(
         Like, Post.id == Like.post_id, isouter=True).group_by(Post.id).filter(or_(Post.title.ilike(
             f'%{search}%'), Post.content.ilike(f'%{search}%'))).offset(skip).limit(limit).all()
