@@ -66,7 +66,7 @@ def test_interest(bank_account_balance):
     (500, 450, 50),
     (800, 200, 600)
 ])
-# You can user the parametrize and fixture decorators to test cases like the test below
+# You can use the parametrize and fixture decorators to test cases like the test below
 def test_bank_transaction(zero_bank_account, deposited, withdrew, expected):
     zero_bank_account.deposit(deposited)
     zero_bank_account.withdraw(withdrew)
