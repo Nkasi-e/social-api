@@ -1,15 +1,12 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,windows,linux,macos
 
-Dockerfile
-docker-compose-dev.yml
-docker-compose-prod.yml
 ### Linux ###
 *~
 
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
-
+docker
 # KDE directory preferences
 .directory
 
