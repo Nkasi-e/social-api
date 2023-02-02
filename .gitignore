@@ -49,6 +49,7 @@ Temporary Items
 # iCloud generated files
 *.icloud
 playground.py
+database_test.py
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
