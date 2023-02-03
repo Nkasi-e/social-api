@@ -1,34 +1,28 @@
 # this conftest.py is a special test that pytest uses and it allows us to define fixtures in here and any fixture defined in this file will automatically be accessible to any of our tests within this package.. it is package specific, even subpackages will automatically have access to any of these fixtures
 
 import os
-from pydoc import cli
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 from app.config import get_db, Base
 from app.main import app
 import pytest
-from alembic import command  # used for testing db
+# from alembic import command  # used for testing db
 from app.oauth2 import create_access_token
 from app import models
-
-
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.environ.get('TEST_DATABASE_URL')
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, future=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
-
-# Dependency
-# def override_get_db():
 
 # scope="module"
 @pytest.fixture
