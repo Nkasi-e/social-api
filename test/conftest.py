@@ -7,22 +7,26 @@ from fastapi.testclient import TestClient
 from app.config import get_db, Base
 from app.main import app
 import pytest
-# from alembic import command  # used for testing db
+from alembic import command  # used for testing db
 from app.oauth2 import create_access_token
 from app import models
-from dotenv import load_dotenv
 
+
+from dotenv import load_dotenv
 
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = os.environ.get('TEST_DATABASE_URL')
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, future=True)
 
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
+
+# Dependency
+# def override_get_db():
 
 # scope="module"
 @pytest.fixture
