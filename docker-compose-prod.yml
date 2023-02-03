@@ -1,0 +1,35 @@
+version: "3"
+services:
+  api:
+    image: nkasi/socialapi
+    depends_on:
+      - postgres
+    ports:
+      - 80:8000
+    # volumes:
+    #   - ./:/usr/src/app:ro
+    # command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file:
+      - ./.env #pointing to env file
+    environment:
+      - DATABASE_HOSTNAME=${DB_HOST}
+      - DATABASE_PORT=${DB_PORT}
+      - DATABASE_PASSWORD=${DB_PASSWORD}
+      - DATABASE_NAME=${USER_DB}
+      - DATABASE_USERNAME=${DB_HOST}
+      - SECRET_KEY=${JWT_SECRET_KEY}
+      - ALGORITHM=${JWT_ALGORITHM}
+      - ACCESS_TOKEN_EXPIRES=${EXPIRES_IN}
+  postgres:
+    image: postgres
+    # env_file:
+    #   - ./.env
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD} # to reference env variable
+      - POSTGRES_DB=${USER_DB}
+    
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+    postgres-db:
