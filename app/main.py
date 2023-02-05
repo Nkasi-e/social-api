@@ -36,4 +36,4 @@ app.include_router(like.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to my API"}
+    return {"message": "Welcome to Social Hub"}
