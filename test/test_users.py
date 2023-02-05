@@ -6,7 +6,7 @@ from app.oauth2 import JWT_ALGORITHM, JWT_SECRET_KEY
 
 def test_root(client):
     res = client.get('/')
-    assert res.json().get('message') == 'Welcome to my API'
+    assert res.json().get('message') == "Welcome to Social Hub"
     assert res.status_code == 200
 
 

@@ -101,7 +101,7 @@ API documentation:
 
 ```json
 {
-  "email": "johndoe@example.com",
+  "username": "johndoe@example.com",
   "password": "Password123"
 }
 ```
@@ -115,11 +115,126 @@ API documentation:
 }
 ```
 
+- Note: The login request is not a request format but in form-data when using postman, this is because OAuth2PasswordRequestForm from fastapi.security.oauth2 was used
+
+### Create Post
+
+- Route: /posts
+- Method: POST
+- Header
+  - Authorization: Bearer {token}
+- Body:
+
+```json
+{
+  "title": "string",
+  "content": "string",
+  "published": true
+}
+```
+
+- Responses: Success
+
+```json
+{
+  "title": "string",
+  "content": "string",
+  "published": true,
+  "id": 0,
+  "created_at": "2023-02-05T19:02:41.204Z",
+  "owner_id": 0,
+  "owner": {
+    "id": 0,
+    "email": "user@example.com",
+    "created_at": "2023-02-05T19:02:41.204Z"
+  }
+}
+```
+
+### Get Post
+
+- Route: /posts
+- Method: GET
+- Header
+  - Authorization: Bearer {token}
+- Body:
+
+```json
+[
+  {
+    "Post": {
+      "title": "string",
+      "content": "string",
+      "published": true,
+      "id": 4,
+      "created_at": "2023-02-05T19:10:08.030Z",
+      "owner_id": 4,
+      "owner": {
+        "id": 4,
+        "email": "user@example.com",
+        "created_at": "2023-02-05T19:10:08.030Z"
+      }
+    },
+    "likes": 0
+  }
+  {
+    "Post": {
+      "title": "string",
+      "content": "string",
+      "published": true,
+      "id": 1,
+      "created_at": "2023-02-05T19:10:08.030Z",
+      "owner_id": 2,
+      "owner": {
+        "id": 2,
+        "email": "johndoe@example.com",
+        "created_at": "2023-02-05T19:10:08.030Z"
+      }
+    },
+    "likes": 0
+  }
+  {
+    "Post": {
+      "title": "string",
+      "content": "string",
+      "published": true,
+      "id": 3,
+      "created_at": "2023-02-05T19:10:08.030Z",
+      "owner_id": 2,
+      "owner": {
+        "id": 2,
+        "email": "user@example.com",
+        "created_at": "2023-02-05T19:10:08.030Z"
+      }
+    },
+    "likes": 0
+  }
+]
+```
+
+### Unit and Integration Tests results
+
+<!-- <p align="center"><img src="public/pytest.png" alt="Gophie" height="250px" width="600px"></p> -->
+
+![Preview](public/pytest.png)
+
 ## Getting Started
 
 ### Prerequisites
 
 In order to install and run this project locally, you would need to have the following installed on your local machine.
 
-- Python ^3.10
-- Postgresql
+- Python ^3.10,
+- PostgreSQL
+
+### Installation
+
+- Clone this repository
+
+```
+git clone [https://github.com/Nkasi-e/social-api.git]
+```
+
+- update env with .env.example.txt
+- Download all dependecies using `pip install -r requirements.txt` or `pipenv install` that's if you have pipenv installed already on your machine
+- run uvicorn app.main:app --reload <hr>
