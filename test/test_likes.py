@@ -16,7 +16,7 @@ def test_like_on_post(authorized_client, test_post):
     assert res.status_code == 201
 
 
-def test_like_post_twice(authorized_client, test_post, test_like):
+def test_unable_to_like_post_twice(authorized_client, test_post, test_like):
     res = authorized_client.post(
         f'/likes/', json={"post_id": test_post[3].id, "dir": 1})
     assert res.status_code == 409
