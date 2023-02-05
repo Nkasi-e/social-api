@@ -1,3 +1,5 @@
+[![Social Hub API](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml/badge.svg)](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml)
+
 # SOCIAL-HUB
 
 ## _An API that allows users to create contents_
@@ -191,7 +193,7 @@ API documentation:
         "created_at": "2023-02-05T19:10:08.030Z"
       }
     },
-    "likes": 0
+    "likes": 4
   }
   {
     "Post": {
@@ -207,7 +209,7 @@ API documentation:
         "created_at": "2023-02-05T19:10:08.030Z"
       }
     },
-    "likes": 0
+    "likes": 2
   }
 ]
 ```

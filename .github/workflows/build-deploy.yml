@@ -1,4 +1,5 @@
-name: Build and Deploy Social API Code
+# name: Build and Deploy Social API Code
+name: Social Hub API
 
 on: [push, pull_request]
 
