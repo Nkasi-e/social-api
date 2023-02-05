@@ -1,4 +1,4 @@
-![Social Hub API](https://github.com/nkasi-e/social-api/actions/workflows/build-deplo.yml/badge.svg)
+[![Social Hub API](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml/badge.svg)](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml)
 
 # SOCIAL-HUB
 
