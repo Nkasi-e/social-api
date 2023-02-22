@@ -1,6 +1,7 @@
-[![Social Hub API](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml/badge.svg)](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml)
 
 # SOCIAL-HUB
+
+[![Social Hub API](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml/badge.svg)](https://github.com/Nkasi-e/social-api/actions/workflows/build-deploy.yml) <a href='https://coveralls.io/github/Nkasi-e/social-api?branch=readme'><img src='https://coveralls.io/repos/github/Nkasi-e/social-api/badge.svg?branch=readme' alt='Coverage Status' /></a>
 
 ## _An API that allows users to create contents_
 
@@ -117,8 +118,6 @@ API documentation:
 }
 ```
 
-- Note: The login request is not a request format but in form-data when using postman, this is because OAuth2PasswordRequestForm from fastapi.security.oauth2 was used
-
 ### Create Post
 
 - Route: /posts
@@ -214,20 +213,15 @@ API documentation:
 ]
 ```
 
-### Unit and Integration Tests results
-
-<!-- <p align="center"><img src="public/pytest.png" alt="Gophie" height="250px" width="600px"></p> -->
-
-![Preview](public/pytest.png)
-
 ## Getting Started
 
 ### Prerequisites
 
-In order to install and run this project locally, you would need to have the following installed on your local machine.
+In order to  run this project locally, you would need to have the following installed on your local machine.
 
 - Python ^3.10,
 - PostgreSQL
+- Docker - optional
 
 ### Installation
 
@@ -238,5 +232,6 @@ git clone [https://github.com/Nkasi-e/social-api.git]
 ```
 
 - update env with .env.example.txt
-- Download all dependecies using `pip install -r requirements.txt` or `pipenv install` that's if you have pipenv installed already on your machine
+- Download all dependecies using ```pip install -r requirements.txt``` or ```pipenv install``` that's if you have pipenv installed already on your machine
 - run uvicorn app.main:app --reload <hr>
+

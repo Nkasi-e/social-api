@@ -14,6 +14,8 @@ passlib = {extras = ["bcrypt"], version = "*"}
 python-jose = {extras = ["cryptography"], version = "*"}
 alembic = "*"
 pytest = "*"
+pytest-cov = "*"
+coveralls = "*"
 
 [dev-packages]
 
