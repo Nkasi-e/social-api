@@ -1,6 +1,5 @@
 from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Depends
-from httpx import post
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from ..models import Post, Like, User
