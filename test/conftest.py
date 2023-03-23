@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = os.environ.get('TEST_DATABASE_URL')
+SQLALCHEMY_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, future=True)
 
@@ -27,6 +27,7 @@ Base.metadata.create_all(bind=engine)
 
 # Dependency
 # def override_get_db():
+
 
 # scope="module"
 @pytest.fixture
@@ -49,6 +50,7 @@ def client(database):
             yield database
         finally:
             database.close()
+
     app.dependency_overrides[get_db] = override_get_db
     # command.upgrade("head")  # alembic
     yield TestClient(app)
@@ -57,27 +59,21 @@ def client(database):
 
 @pytest.fixture  # creating data entry for user login
 def test_user(client):
-    user_data = {
-        "email": "test@gmail.com",
-        "password": "Testpassword1"
-    }
-    res = client.post('/users/', json=user_data)
+    user_data = {"email": "test@gmail.com", "password": "Testpassword1"}
+    res = client.post("/users/", json=user_data)
     assert res.status_code == 201
     new_user = res.json()
-    new_user['password'] = user_data["password"]
+    new_user["password"] = user_data["password"]
     return new_user
 
 
 @pytest.fixture
 def test_user2(client):
-    user_data = {
-        "email": "test123@gmail.com",
-        "password": "Testpassword1"
-    }
-    res = client.post('/users/', json=user_data)
+    user_data = {"email": "test123@gmail.com", "password": "Testpassword1"}
+    res = client.post("/users/", json=user_data)
     assert res.status_code == 201
     new_user = res.json()
-    new_user['password'] = user_data["password"]
+    new_user["password"] = user_data["password"]
     return new_user
 
 
@@ -89,10 +85,7 @@ def token(test_user):
 @pytest.fixture
 # used when we want to test an authorized or authenticated client
 def authorized_client(client, token):  # creating authenticated client
-    client.headers = {
-        **client.headers,
-        "Authorization": f"Bearer {token}"
-    }
+    client.headers = {**client.headers, "Authorization": f"Bearer {token}"}
 
     return client
 
@@ -103,27 +96,28 @@ def test_post(test_user, database, test_user2):
         {
             "title": "first title",
             "content": "first content",
-            "owner_id": test_user['id']
+            "owner_id": test_user["id"],
         },
         {
             "title": "second title",
             "content": "second content",
-            "owner_id": test_user['id']
+            "owner_id": test_user["id"],
         },
         {
             "title": "third title",
             "content": "third content",
-            "owner_id": test_user['id']
+            "owner_id": test_user["id"],
         },
         {
             "title": "fourth title",
             "content": "fourth content",
-            "owner_id": test_user2['id']
-        }
+            "owner_id": test_user2["id"],
+        },
     ]
 
     def create_post_model(post):  # coverting post_data into a list
         return models.Post(**post)
+
     post_map = map(create_post_model, post_data)
     posts = list(post_map)
     database.add_all(posts)

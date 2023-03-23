@@ -16,6 +16,7 @@ alembic = "*"
 pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
+black = "*"
 
 [dev-packages]
 
