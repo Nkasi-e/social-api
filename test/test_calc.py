@@ -13,11 +13,7 @@ def bank_account_balance():
     return BankAccount(50)
 
 
-@pytest.mark.parametrize("num1, num2, expected", [
-    (3, 2, 5),
-    (7, 3, 10),
-    (10, 5, 15)
-])
+@pytest.mark.parametrize("num1, num2, expected", [(3, 2, 5), (7, 3, 10), (10, 5, 15)])
 def test_add(num1, num2, expected):
     assert add(num1, num2) == expected
 
@@ -61,11 +57,9 @@ def test_interest(bank_account_balance):
 #     zero_bank_account.deposit(500)
 #     zero_bank_account.withdraw(300)
 #     assert zero_bank_account.balance == 200
-@pytest.mark.parametrize("deposited, withdrew, expected", [
-    (300, 100, 200),
-    (500, 450, 50),
-    (800, 200, 600)
-])
+@pytest.mark.parametrize(
+    "deposited, withdrew, expected", [(300, 100, 200), (500, 450, 50), (800, 200, 600)]
+)
 # You can use the parametrize and fixture decorators to test cases like the test below
 def test_bank_transaction(zero_bank_account, deposited, withdrew, expected):
     zero_bank_account.deposit(deposited)

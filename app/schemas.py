@@ -51,7 +51,7 @@ class CreateUser(BaseModel):
         if not re.match(r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$", password):
             raise HTTPException(
                 status_code=400,
-                detail="Password must have a minimum of 8 characters, 1 Uppercase, 1 lowercase and 1 number"
+                detail="Password must have a minimum of 8 characters, 1 Uppercase, 1 lowercase and 1 number",
             )
         return password
 
@@ -70,6 +70,7 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     id: Optional[str] = None
     email: Optional[str] = None
+
 
 # schema for Likes
 

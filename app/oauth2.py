@@ -14,11 +14,11 @@ from .schemas import TokenData
 load_dotenv()
 
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="login")
 
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
-JWT_ALGORITHM = os.environ.get('JWT_ALGORITHM')
-EXPIRES_IN = float(os.environ.get('EXPIRES_IN'))
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
+JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM")
+EXPIRES_IN = float(os.environ.get("EXPIRES_IN"))
 
 
 # creating token fn
@@ -28,8 +28,7 @@ def create_access_token(data: dict):
     expires = datetime.utcnow() + timedelta(days=EXPIRES_IN)
     to_encode.update({"exp": expires})
 
-    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY,
-                             algorithm=JWT_ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
     return encoded_jwt
 
 
@@ -46,11 +45,13 @@ def verify_access_token(token: str, credentials_exception):  # Verifying token f
 
 
 # Authentication fn
-def get_current_user(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_schema), db: Session = Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=401,
-        detail='Unauthorized failed. Could not validate credentials',
-        headers={"WWW-Authenticate": "Bearer"}
+        detail="Unauthorized failed. Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
     )
 
     token = verify_access_token(token, credentials_exception)
